@@ -1,0 +1,33 @@
+{
+  "name": "coingood",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "shadow-cljs watch app",
+    "release": "shadow-cljs release app",
+    "start": "shadow-cljs server",
+    "clean": "rm -rf webapp/target && rm -rf webapp/public/js",
+    "clean-win": "rmdir /s /q webapp/public/js & rmdir /s /q webapp/target"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@openzeppelin/gsn-provider": "^0.1.8",
+    "@openzeppelin/network": "^0.2.10",
+    "create-react-class": "^15.6.3",
+    "eth-crypto": "^1.5.0",
+    "ethers": "^4.0.37",
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2",
+    "uuid": "^3.3.3",
+    "web3": "^1.2.1"
+  },
+  "devDependencies": {
+    "@openzeppelin/contracts-ethereum-package": "^2.3.0",
+    "@openzeppelin/gsn-helpers": "^0.2.0",
+    "@openzeppelin/upgrades": "^2.5.3",
+    "shadow-cljs": "^2.6.10"
+  }
+}
