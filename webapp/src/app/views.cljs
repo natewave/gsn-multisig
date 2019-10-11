@@ -1,38 +1,53 @@
 (ns app.views
-  (:require ["@openzeppelin/gsn-provider" :refer [GSNProvider]]
+  (:require ["@openzeppelin/network" :refer [fromInjected fromConnection ephemeral]]
+            ;;["@openzeppelin/gsn-provider" :refer [GSNProvider]]
+            ;; ["ethereumjs-wallet" :refer [generate]]
             ["web3" :as Web3]
-            ["ethereumjs-wallet" :refer [generate]]
             [app.state :refer [app-state]]
-            [app.events :refer [increment decrement]]
+            [app.events :refer [increment decrement fetch-value]]
             [shadow.resource :as rc]))
 
 (def contract-abi (.parse js/JSON (rc/inline "./Counter.json")))
+(def sign-key (ephemeral))
 
-;; FIXME: change it to use your own deployed contract for ganache
-(def contract-addr "0xa3ad9637c1816Cb43E77eE25c0252Ad187BE7e58")
+(js/console.log (str "sign-key: " sign-key ", address: " (.-address sign-key)))
+
+;; this is for ropsten (https://ropsten.etherscan.io/address/0x6F866Aee6a3c562968c461A8b7d63113B18c567B)
+;; change it to use your own deployed contract if you want to test eg. in ganache/local
+(def contract-addr "0x6F866Aee6a3c562968c461A8b7d63113B18c567B")
 
 (defn init-web3 []
-  (let [gsn-provider (new GSNProvider "http://localhost:8545" (clj->js {:signKey (.-privKey (generate))}))]
-    (new Web3 gsn-provider)))
+  ;; fromInjected to use with metamask
+  ;; fromConnection to use with nodes, eg. local or infura
+  (let [web3-context-promise (fromConnection "https://ropsten.infura.io/v3/f2dfa06b62db4226bc53595fd2af411f"
+                                             (js-obj "gsn" (js-obj "signKey" sign-key)))
+                                           ;; this doesn't work for some reason: (clj->js {:gsn {:signKey sign-key}}))
+        ]
+    (-> web3-context-promise
+        (.then (fn [web3-context]
+                 (let [web3 (.-lib web3-context)]
+                   {:web3 web3
+                    :accounts (.-accounts web3-context)}))))))
 
-(defn header
-  []
+(defn header []
   [:div
    [:h1 "GSN-enabled demo counter"]])
 
-(defn counter
-  [web3]
-  (let [contract (js/web3.eth.Contract. contract-abi contract-addr)
-        _ (js/console.log (str "web3: " (.-version web3)))
-        _ (js/console.log (str "contract: " (-> contract .-methods .-value)))
-        _ (aset js/window "contract" contract)]
+(defn counter []
+  (let [web3-details (-> (init-web3)
+                         (.then (fn [{:keys [web3 accounts]}]
+                                  (let [contract (js/web3.eth.Contract. contract-abi contract-addr)
+                                        _ (fetch-value contract)]
+                                    {:contract (js/web3.eth.Contract. contract-abi contract-addr)
+                                     :web3 web3
+                                     :accounts accounts
+                                     :sign-key sign-key}))))]
     [:div
-     [:button.btn {:on-click #(decrement %1 contract)} "-"]
+     [:button.btn {:on-click #(decrement %1 web3-details)} "-"]
      [:button {:disabled true} (get @app-state :count)]
-     [:button.btn {:on-click #(increment %1 contract)} "+"]]))
+     [:button.btn {:on-click #(increment %1 web3-details)} "+"]]))
 
 (defn app []
-  (let [web3 (init-web3)]
-    [:div
-     [header]
-     [counter web3]]))
+  [:div
+   [header]
+   [counter]])

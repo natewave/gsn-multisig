@@ -2,3 +2,9 @@ node_modules
 .DS_Store
 .shadow-cljs
 .openzeppelin
+
+# local env variables
+.env
+
+# truffle build directory
+build

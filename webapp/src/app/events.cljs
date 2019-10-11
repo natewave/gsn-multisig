@@ -1,16 +1,36 @@
 (ns app.events
-  (:require [app.state :refer [app-state]]))
+  (:require [app.state :as state]))
 
-(defn increment
-  [event contract]
-  (.preventDefault event)
-  (let [increase (-> contract .-methods .value)]
-    (-> (.call increase)
+(defn fetch-value [contract]
+  (let [txn (-> contract .-methods .value)]
+    (-> (.call txn)
         (.then (fn [value]
-                 (js/console.log (str "value: " value))
-                 (swap! app-state update-in [:count] inc))))))
+                 (swap! state/app-state assoc-in [:count] value))))))
+(defn increment
+  [event web3-details]
+  (.preventDefault event)
+  (-> web3-details
+      (.then (fn [details]
+               (-> (.enable js/window.ethereum)
+                   (.then (fn [] details)))))
+      (.then (fn [{:keys [contract sign-key]}]
+               (-> contract
+                   .-methods
+                   (.increase)
+                   ;;(.send (clj->js {:from "0xC41878Ccbc4516b19571bF7871dcEd911923D5b4"}))
+                   (.send (clj->js {:from (.-address sign-key)}))
+                   (.then (fn [_] (fetch-value contract))))))))
 
 (defn decrement
-  [event contract]
+  [event web3-details]
   (.preventDefault event)
-  (swap! app-state update-in [:count] dec))
+  (-> web3-details
+      (.then (fn [details]
+               (-> (.enable js/window.ethereum)
+                   (.then (fn [] details)))))
+      (.then (fn [{:keys [contract sign-key]}]
+               (-> contract
+                   .-methods
+                   (.decrease)
+                   (.send (clj->js {:from (.-address sign-key)}))
+                   (.then (fn [_] (fetch-value contract))))))))

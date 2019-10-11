@@ -28,6 +28,11 @@
     "@openzeppelin/contracts-ethereum-package": "^2.3.0",
     "@openzeppelin/gsn-helpers": "^0.2.0",
     "@openzeppelin/upgrades": "^2.5.3",
-    "shadow-cljs": "^2.6.10"
+    "dotenv": "^8.1.0",
+    "shadow-cljs": "^2.6.10",
+    "truffle-hdwallet-provider": "^1.0.17"
+  },
+  "engines": {
+    "node": "11.2.0"
   }
 }
