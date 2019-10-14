@@ -9,7 +9,7 @@ npm install
 
 #### Run shadow-cljs server
 ```shell
-shadow-cljs server
+shadow-cljs
 ```
 
 #### Run dev server

@@ -19,8 +19,8 @@
 (defn init-web3 []
   ;; fromInjected to use with metamask
   ;; fromConnection to use with nodes, eg. local or infura
-  (let [web3-context-promise (fromConnection "https://ropsten.infura.io/v3/f2dfa06b62db4226bc53595fd2af411f"
-                                             (js-obj "gsn" (js-obj "signKey" sign-key)))
+  (let [web3-context-promise (fromInjected "https://ropsten.infura.io/v3/f2dfa06b62db4226bc53595fd2af411f"
+                                           (js-obj "gsn" (js-obj "signKey" sign-key)))
                                            ;; this doesn't work for some reason: (clj->js {:gsn {:signKey sign-key}}))
         ]
     (-> web3-context-promise

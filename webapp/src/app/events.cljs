@@ -18,7 +18,7 @@
                    .-methods
                    (.increase)
                    ;;(.send (clj->js {:from "0xC41878Ccbc4516b19571bF7871dcEd911923D5b4"}))
-                   (.send (clj->js {:from (.-address sign-key)}))
+                   (.send (clj->js {:from "0xC41878Ccbc4516b19571bF7871dcEd911923D5b4"}))
                    (.then (fn [_] (fetch-value contract))))))))
 
 (defn decrement
