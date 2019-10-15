@@ -42,3 +42,6 @@ visit localhost:3000
 
 ## GSN details
 The GSN-enabled web3 provider is created using `@openzeppelin/network`. It will use a key generated on the spot to sign all transactions on behalf of the user and will use the GSN to relay them to the network.
+
+## Deploy to testnet
+MultisAccount Instance deployed to 0x8e095dC6900CF561C91cCA3Da92F999a8cF50426

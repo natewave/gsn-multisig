@@ -13,8 +13,8 @@ module.exports = {
       gasPrice: 5e9,
       networkId: '*',
     },
-    rinkby: {
-      provider: () => new HDWalletProvider(process.env.DEV_MNEMONIC, "https://rinkby.infura.io/v3/" + infuraProjectId),
+    rinkeby: {
+      provider: () => new HDWalletProvider(process.env.DEV_MNEMONIC, "https://rinkeby.infura.io/v3/" + infuraProjectId),
       networkId: 4,
     },
     ropsten: {
