@@ -11,8 +11,9 @@
 
 ;; hard coded for ropsten
 ;; change it to use your own deployed contract if you want to test eg. in ganache/local
-(def network-id :3)
-(def contract-addr "0x0D14C2cCAecCf8D437F104cd0B6d9d67090C2feB")
+(def network-id :4)
+(def contract-addr "0x7B144C4b0c92dE23aD120C97183083d01064b6b9") ;; <- ropsten 
+;; (def contract-addr "0x6F866Aee6a3c562968c461A8b7d63113B18c567B") ;; rinkeby
 
 (defn init-web3 []
   ;; fromInjected to use with metamask
@@ -20,9 +21,11 @@
   (let [portis (new Portis
                     portis-app-id
                     "ropsten"
-                    (js-obj "gasRelay" true))]
+                    #js {:gasRelay true}
+                    ;;(js-obj "gasRelay" true)
+                    )]
 
-    (new Web3 (aget portis "provider"))))
+    (new Web3 portis.provider)))
 
 (defn header []
   [:div

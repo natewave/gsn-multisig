@@ -9,10 +9,14 @@
   ;                (swap! state/app-state assoc-in [:count] value))))))
 (defn deploy
   [event web3-details]
-  (let [instance-factory (:instance-factory web3-details)]
+  (let [instance-factory (:instance-factory web3-details)
+        _ (js/console.log (str "accounts: " (-> web3-details :web3 (.-eth) .getAccounts)))]
     (.preventDefault event)
-    (-> instance-factory
-        .-methods
-        (.create 1 0)
-        (.send)
-        (.then (fn [a] (js/console.log (str "hey: " a)))))))
+    (-> web3-details :web3 (.-eth) .getAccounts
+        (.then (fn [accounts]
+                 (js/console.log (str "accounts: " accounts))
+                 (-> instance-factory
+                     .-methods
+                     (.create accounts 0)
+                     (.send (clj->js {:from (get accounts 0)}))
+                     (.then (fn [a] (js/console.log (str "hey: " a))))))))))
