@@ -1,53 +1,44 @@
 (ns app.views
-  (:require ["@openzeppelin/network" :refer [fromInjected fromConnection ephemeral]]
-            ;;["@openzeppelin/gsn-provider" :refer [GSNProvider]]
-            ;; ["ethereumjs-wallet" :refer [generate]]
+  (:require ["@portis/web3/es" :default Portis]
             ["web3" :as Web3]
             [app.state :refer [app-state]]
-            [app.events :refer [increment decrement fetch-value]]
+            [app.events :refer [deploy fetch-value]]
             [shadow.resource :as rc]))
 
-(def contract-abi (.parse js/JSON (rc/inline "./Counter.json")))
-(def sign-key (ephemeral))
+(def contract-abi (.parse js/JSON (rc/inline "./MultisAccount.json")))
+(def portis-app-id "94134bbc-b4b7-4dd2-91c1-f0714c7fb3cd")
+(def networks {:1 "mainnet" :3 "ropsten" :4 "rinkeby"})
 
-(js/console.log (str "sign-key: " sign-key ", address: " (.-address sign-key)))
-
-;; this is for ropsten (https://ropsten.etherscan.io/address/0x6F866Aee6a3c562968c461A8b7d63113B18c567B)
+;; hard coded for ropsten
 ;; change it to use your own deployed contract if you want to test eg. in ganache/local
-(def contract-addr "0x6F866Aee6a3c562968c461A8b7d63113B18c567B")
+(def network-id :3)
+(def contract-addr "0x0D14C2cCAecCf8D437F104cd0B6d9d67090C2feB")
 
 (defn init-web3 []
   ;; fromInjected to use with metamask
   ;; fromConnection to use with nodes, eg. local or infura
-  (let [web3-context-promise (fromInjected "https://ropsten.infura.io/v3/f2dfa06b62db4226bc53595fd2af411f"
-                                           (js-obj "gsn" (js-obj "signKey" sign-key)))
-                                           ;; this doesn't work for some reason: (clj->js {:gsn {:signKey sign-key}}))
-        ]
-    (-> web3-context-promise
-        (.then (fn [web3-context]
-                 (let [web3 (.-lib web3-context)]
-                   {:web3 web3
-                    :accounts (.-accounts web3-context)}))))))
+  (let [portis (new Portis
+                    portis-app-id
+                    "ropsten"
+                    (js-obj "gasRelay" true))]
+
+    (new Web3 (aget portis "provider"))))
 
 (defn header []
   [:div
    [:h1 "GSN-enabled demo counter"]])
 
-(defn counter []
-  (let [web3-details (-> (init-web3)
-                         (.then (fn [{:keys [web3 accounts]}]
-                                  (let [contract (js/web3.eth.Contract. contract-abi contract-addr)
-                                        _ (fetch-value contract)]
-                                    {:contract (js/web3.eth.Contract. contract-abi contract-addr)
-                                     :web3 web3
-                                     :accounts accounts
-                                     :sign-key sign-key}))))]
+(defn deploy-multisig []
+  (let [web3 (init-web3)
+        instance-factory (web3.eth.Contract. contract-abi contract-addr)
+        web3-details {:web3 web3
+                      :instance-factory instance-factory
+                      :accounts (.getAccounts (.-eth web3))}]
     [:div
-     [:button.btn {:on-click #(decrement %1 web3-details)} "-"]
-     [:button {:disabled true} (get @app-state :count)]
-     [:button.btn {:on-click #(increment %1 web3-details)} "+"]]))
+     [:button.btn {:on-click #(deploy %1 web3-details)} "Deploy Multisig"]
+     [:button {:disabled true} (get @app-state :count)]]))
 
 (defn app []
   [:div
    [header]
-   [counter]])
+   [deploy-multisig]])

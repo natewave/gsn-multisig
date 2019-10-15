@@ -8,3 +8,4 @@ node_modules
 
 # truffle build directory
 build
+.openzeppelin/.session
