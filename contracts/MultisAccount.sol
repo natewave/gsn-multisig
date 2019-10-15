@@ -1,15 +1,12 @@
 pragma solidity ^0.5.0;
 
 import "@openzeppelin/contracts-ethereum-package/contracts/GSN/GSNRecipient.sol";
+import "@openzeppelin/upgrades/contracts/Initializable.sol";
 
 import "./Factory.sol";
 import "./MultiSigWallet.sol";
 
-
-/// @title Multisignature wallet factory - Allows creation of multisig wallet.
-/// @author Stefan George - <stefan.george@consensys.net>
-contract MultisAccountFactory is Factory, GSNRecipient {
-
+contract MultisAccountFactory is Initializable, GSNRecipient, MultiSigWallet, Factory {
     /*
      * Public functions
      */
@@ -17,11 +14,10 @@ contract MultisAccountFactory is Factory, GSNRecipient {
     /// @param _owners List of initial owners.
     /// @param _required Number of required confirmations.
     /// @return Returns wallet address.
-    function create(address[] memory _owners, uint _required)
+    function initialize(address[] memory _owners, uint _required) initializer
         public
-        returns (address wallet)
     {
-        wallet = address(new MultiSigWallet(_owners, _required));
-        register(wallet);
+        MultiSigWallet.initialize(_owners, _required);
+        register(address(this));
     }
 }

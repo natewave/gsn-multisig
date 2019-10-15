@@ -1,9 +1,10 @@
 pragma solidity ^0.5.0;
 
+import "@openzeppelin/upgrades/contracts/Initializable.sol";
 
 /// @title Multisignature wallet - Allows multiple parties to agree on transactions before execution.
 /// @author Stefan George - <stefan.george@consensys.net>
-contract MultiSigWallet {
+contract MultiSigWallet is Initializable {
 
     /*
      *  Events
@@ -106,8 +107,7 @@ contract MultiSigWallet {
     /// @dev Contract constructor sets initial owners and required number of confirmations.
     /// @param _owners List of initial owners.
     /// @param _required Number of required confirmations.
-    constructor(address[] memory _owners, uint _required)
-        public
+    function initialize(address[] memory _owners, uint _required) initializer public
         validRequirement(_owners.length, _required)
     {
         for (uint i=0; i<_owners.length; i++) {
