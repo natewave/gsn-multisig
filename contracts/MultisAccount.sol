@@ -8,18 +8,21 @@ import "./GSNMultiSigWallet.sol";
 contract MultisAccount is GSNRecipient {
     GSNMultiSigWallet[] deployedWallets;
 
+    event ContractInstantiation(address sender, address instantiation);
+
     function initialize() initializer public
     {
         GSNRecipient.initialize();
     }
 
-    function createMultisigWallet(address[] memory _owners, uint _required) public returns (address)
+    function createMultisigWallet(address[] memory _owners, uint _required) public returns (address wallet)
     {
-        GSNMultiSigWallet wallet = new GSNMultiSigWallet();
-        wallet.initialize(_owners, _required);
-        deployedWallets.push(wallet);
+        GSNMultiSigWallet multisig = new GSNMultiSigWallet();
+        multisig.initialize(_owners, _required);
+        deployedWallets.push(multisig);
+        address wallet = address(multisig);
 
-        return address(wallet);
+        emit ContractInstantiation(_msgSender(), wallet);
     }
 
     function getDeployedWallets() public view returns(GSNMultiSigWallet[] memory) {

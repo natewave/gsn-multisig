@@ -14,7 +14,11 @@
 (def network-id :4)
 ;; (def contract-addr "0xAc0866AB174ea82bf646B73683B8689900dE7Bad") ;; <- ropsten 
 ;; (def contract-addr "0xdb9358f7EDb46499c9e64922F6c67fc654DC10Bd") ;; ropsten
-(def contract-addr "0x6310eea3cE124675EBDcf07C4aD1150fab7375CC")
+(def contract-addr "0x06Ab0E124B3A36c9Cf879dD46DC8eb92729e2123")
+
+;; working ropsten
+;; (def contract-addr "0x6310eea3cE124675EBDcf07C4aD1150fab7375CC")
+
 ;; (def contract-addr "0x6F866Aee6a3c562968c461A8b7d63113B18c567B") ;; rinkeby
 
 (defn init-web3 []
