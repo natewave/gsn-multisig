@@ -17,6 +17,6 @@
                  (js/console.log (str "accounts: " accounts))
                  (-> instance-factory
                      .-methods
-                     (.create accounts 0)
+                     (.createMultisigWallet accounts 0)
                      (.send (clj->js {:from (get accounts 0)}))
                      (.then (fn [a] (js/console.log (str "hey: " a))))))))))

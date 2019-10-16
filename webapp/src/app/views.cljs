@@ -12,7 +12,7 @@
 ;; hard coded for ropsten
 ;; change it to use your own deployed contract if you want to test eg. in ganache/local
 (def network-id :4)
-(def contract-addr "0x7B144C4b0c92dE23aD120C97183083d01064b6b9") ;; <- ropsten 
+(def contract-addr "0xAc0866AB174ea82bf646B73683B8689900dE7Bad") ;; <- ropsten 
 ;; (def contract-addr "0x6F866Aee6a3c562968c461A8b7d63113B18c567B") ;; rinkeby
 
 (defn init-web3 []
@@ -29,7 +29,7 @@
 
 (defn header []
   [:div
-   [:h1 "GSN-enabled demo counter"]])
+   [:h1 "GSN-enabled Multisig"]])
 
 (defn deploy-multisig []
   (let [web3 (init-web3)
@@ -39,7 +39,8 @@
                       :accounts (.getAccounts (.-eth web3))}]
     [:div
      [:button.btn {:on-click #(deploy %1 web3-details)} "Deploy Multisig"]
-     [:button {:disabled true} (get @app-state :count)]]))
+     ;; [:button {:disabled true} (get @app-state :count)]
+     ]))
 
 (defn app []
   [:div
