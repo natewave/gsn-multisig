@@ -14,8 +14,8 @@
 (def network-id :4)
 ;; (def contract-addr "0x6F866Aee6a3c562968c461A8b7d63113B18c567B") ;; rinkeby
 
-;; ropsten 0x9C3f9f7565bF7d84851C6A08fB6EeaA47fc292b4 
-(def contract-addr "0x7B144C4b0c92dE23aD120C97183083d01064b6b9") ;; <- ropsten 
+;; new ropsten 0x9C3f9f7565bF7d84851C6A08fB6EeaA47fc292b4 
+(def contract-addr "0x9C3f9f7565bF7d84851C6A08fB6EeaA47fc292b4") ;; <- ropsten
 
 ;; old ropsten
 ;; (def contract-addr "0x7B144C4b0c92dE23aD120C97183083d01064b6b9") ;; <- ropsten 
