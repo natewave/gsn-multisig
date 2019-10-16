@@ -12,7 +12,9 @@
 ;; hard coded for ropsten
 ;; change it to use your own deployed contract if you want to test eg. in ganache/local
 (def network-id :4)
-(def contract-addr "0xAc0866AB174ea82bf646B73683B8689900dE7Bad") ;; <- ropsten 
+;; (def contract-addr "0xAc0866AB174ea82bf646B73683B8689900dE7Bad") ;; <- ropsten 
+;; (def contract-addr "0xdb9358f7EDb46499c9e64922F6c67fc654DC10Bd") ;; ropsten
+(def contract-addr "0xD5ccd9D6ded86c9B2ddDcc8579Ed6c58837aCd91")
 ;; (def contract-addr "0x6F866Aee6a3c562968c461A8b7d63113B18c567B") ;; rinkeby
 
 (defn init-web3 []

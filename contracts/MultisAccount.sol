@@ -2,15 +2,24 @@ pragma solidity ^0.5.0;
 
 import "@openzeppelin/contracts-ethereum-package/contracts/GSN/GSNRecipient.sol";
 
+
 import "./GSNMultiSigWallet.sol";
 
 contract MultisAccount is GSNRecipient {
-    GSNMultiSigWallet[] public deployedWallets;
+    GSNMultiSigWallet[] deployedWallets;
 
-    function createMultisigWallet(address[] memory _owners, uint _required) public
+    function initialize() initializer public
     {
-        GSNMultiSigWallet wallet = new GSNMultiSigWallet(_owners, _required);
+        GSNRecipient.initialize();
+    }
+
+    function createMultisigWallet(address[] memory _owners, uint _required) public returns (address)
+    {
+        GSNMultiSigWallet wallet = new GSNMultiSigWallet();
+        wallet.initialize(_owners, _required);
         deployedWallets.push(wallet);
+
+        return address(wallet);
     }
 
     function getDeployedWallets() public view returns(GSNMultiSigWallet[] memory) {
