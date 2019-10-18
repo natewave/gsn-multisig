@@ -36,8 +36,8 @@ For the purpose of the sample webapp, the GSN-enabled web3 provider is provided 
 ## Deployed contracts
 Contracts have been deployed to ropsten at the following addresses:
 
-* MultisAccount Factory instance: 0x06Ab0E124B3A36c9Cf879dD46DC8eb92729e2123
-* MultisAccountWithDailyLimit factory instance: 0x58EB3B25202047E9B2ad9Bb5DE43Edec96b5EF44
+* MultisAccount Factory instance: [0x06Ab0E124B3A36c9Cf879dD46DC8eb92729e2123](http://ropsten.etherscan.io/address/0x06Ab0E124B3A36c9Cf879dD46DC8eb92729e2123)
+* MultisAccountWithDailyLimit factory instance: [0x58EB3B25202047E9B2ad9Bb5DE43Edec96b5EF44](http://ropsten.etherscan.io/address/0x58EB3B25202047E9B2ad9Bb5DE43Edec96b5EF44)
 
 ## Deploy your own
 Change settings in `networks.js` and add `.env` with infura key and 12-word mnemonic phrase:
