@@ -1,26 +1,13 @@
 (ns app.views
   (:require ["@portis/web3/es" :default Portis]
             ["web3" :as Web3]
-            [app.state :refer [app-state]]
-            [app.events :refer [deploy fetch-value]]
             [shadow.resource :as rc]))
 
 (def contract-abi (.parse js/JSON (rc/inline "./MultisAccount.json")))
 (def portis-app-id "94134bbc-b4b7-4dd2-91c1-f0714c7fb3cd")
-(def networks {:1 "mainnet" :3 "ropsten" :4 "rinkeby"})
-
-;; hard coded for ropsten
-;; change it to use your own deployed contract if you want to test eg. in ganache/local
-(def network-id :4)
-
 
 ;; (def contract-addr "0x06Ab0E124B3A36c9Cf879dD46DC8eb92729e2123") ;; MultisAccount.sol on ropsten
 (def contract-addr "0x58EB3B25202047E9B2ad9Bb5DE43Edec96b5EF44") ;; MultisAccountWithDailyLimit.sol on ropsten
-
-;; working ropsten
-;; (def contract-addr "0x6310eea3cE124675EBDcf07C4aD1150fab7375CC")
-
-;; (def contract-addr "0x6F866Aee6a3c562968c461A8b7d63113B18c567B") ;; rinkeby
 
 (defn init-web3 []
   ;; fromInjected to use with metamask
@@ -28,9 +15,8 @@
   (let [portis (new Portis
                     portis-app-id
                     "ropsten"
-                    #js {:gasRelay true}
                     ;;(js-obj "gasRelay" true)
-                    )]
+                    #js {:gasRelay true})]
 
     (new Web3 portis.provider)))
 
@@ -45,9 +31,7 @@
                       :instance-factory instance-factory
                       :accounts (.getAccounts (.-eth web3))}]
     [:div
-     [:button.btn {:on-click #(deploy %1 web3-details)} "Deploy Multisig"]
-     ;; [:button {:disabled true} (get @app-state :count)]
-     ]))
+     [:button.btn {:on-click #(deploy %1 web3-details)} "Deploy Multisig"]]))
 
 (defn app []
   [:div

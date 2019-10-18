@@ -1,12 +1,5 @@
-(ns app.events
-  (:require [app.state :as state]))
+(ns app.events)
 
-(defn fetch-value [contract]
-  (js/console.log (str "fetchign value")))
-  ; (let [txn (-> contract .-methods .value)]
-  ;   (-> (.call txn)
-  ;       (.then (fn [value]
-  ;                (swap! state/app-state assoc-in [:count] value))))))
 (defn deploy
   [event web3-details]
   (let [instance-factory (:instance-factory web3-details)]
@@ -18,4 +11,4 @@
                      .-methods
                      (.createMultisigWallet accounts 1)
                      (.send (clj->js {:from (get accounts 0)}))
-                     (.then (fn [a] (js/console.log (str "hey: " (js->clj a)))))))))))
+                     (.then (fn [a] (js/console.log (str "Deployment result: " (js->clj a)))))))))))
