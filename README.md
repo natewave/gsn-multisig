@@ -1,6 +1,6 @@
-# GSN PoC
+# GSN-enabled Multisig
 
-A simple app demonstrating the use of the Gas Station Network (GSN)
+A fork of gnosis multisigs to support the Gas Station Network (GSN)
 
 # How to run
 
@@ -19,16 +19,6 @@ $ npx oz-gsn fund-recipient --recipient $address
 
 At this point, the whole GSN and GSN-enabled smart contracts are operational on the local ganache instance
 
-## Run on testnet / infura
-
-Contract has already been deployed to rinkby at address: 0x6F866Aee6a3c562968c461A8b7d63113B18c567B
-add `.env` with infura key and 12-word mnemonic phrase
-
-```
-INFURA_PROJECT_ID="ENTER INFURA PROJECT ID"
-DEV_MNEMONIC="ENTER 12 WORD SEED PHRASE" // only if you want to deploy your own contract
-```
-
 ## Webapp
 The web app is using clojurescript's reagent along with shadow-cljs build tool
 
@@ -41,7 +31,24 @@ $ shadow-cljs watch app
 visit localhost:3000
 
 ## GSN details
-The GSN-enabled web3 provider is created using `@openzeppelin/network`. It will use a key generated on the spot to sign all transactions on behalf of the user and will use the GSN to relay them to the network.
+For the purpose of the sample webapp, the GSN-enabled web3 provider is provided using portis.io
 
-## Deploy to testnet
-MultisAccount Instance deployed to 0x8e095dC6900CF561C91cCA3Da92F999a8cF50426
+## Deployed contracts
+Contracts have been deployed to ropsten at the following addresses:
+
+* MultisAccount Factory instance: 0x06Ab0E124B3A36c9Cf879dD46DC8eb92729e2123
+* MultisAccountWithDailyLimit factory instance: 0x58EB3B25202047E9B2ad9Bb5DE43Edec96b5EF44
+
+## Deploy your own
+Change settings in `networks.js` and add `.env` with infura key and 12-word mnemonic phrase:
+
+```
+INFURA_PROJECT_ID="ENTER INFURA PROJECT ID"
+DEV_MNEMONIC="ENTER 12 WORD SEED PHRASE"
+```
+
+...then run
+
+```shell
+$ openzeppelin create
+```

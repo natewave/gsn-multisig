@@ -1,4 +1,5 @@
 
+# Demo web app for deploying multisigs
 
 ## Setup And Run
 
@@ -9,7 +10,7 @@ npm install
 
 #### Run shadow-cljs server
 ```shell
-shadow-cljs
+shadow-cljs server
 ```
 
 #### Run dev server
