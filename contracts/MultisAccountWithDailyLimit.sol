@@ -3,10 +3,10 @@ pragma solidity ^0.5.0;
 import "@openzeppelin/contracts-ethereum-package/contracts/GSN/GSNRecipient.sol";
 
 
-import "./GSNMultiSigWallet.sol";
+import "./GSNMultiSigWalletWithDailyLimit.sol";
 
-contract MultisAccount is GSNRecipient {
-    GSNMultiSigWallet[] deployedWallets;
+contract MultisAccountWithDailyLimit is GSNRecipient {
+    GSNMultiSigWalletWithDailyLimit[] deployedWallets;
 
     event ContractInstantiation(address sender, address instantiation);
 
@@ -17,7 +17,7 @@ contract MultisAccount is GSNRecipient {
 
     function createMultisigWallet(address[] memory _owners, uint _required) public returns (address wallet)
     {
-        GSNMultiSigWallet multisig = new GSNMultiSigWallet();
+        GSNMultiSigWalletWithDailyLimit multisig = new GSNMultiSigWalletWithDailyLimit();
         multisig.initialize(_owners, _required);
         deployedWallets.push(multisig);
         wallet = address(multisig);
@@ -25,7 +25,7 @@ contract MultisAccount is GSNRecipient {
         emit ContractInstantiation(_msgSender(), wallet);
     }
 
-    function getDeployedWallets() public view returns(GSNMultiSigWallet[] memory) {
+    function getDeployedWallets() public view returns(GSNMultiSigWalletWithDailyLimit[] memory) {
         return deployedWallets;
     }
 

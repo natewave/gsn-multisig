@@ -1,10 +1,12 @@
 pragma solidity ^0.5.0;
 
 import "@openzeppelin/upgrades/contracts/Initializable.sol";
+import "@openzeppelin/contracts-ethereum-package/contracts/GSN/GSNRecipient.sol";
+
 
 /// @title Multisignature wallet - Allows multiple parties to agree on transactions before execution.
 /// @author Stefan George - <stefan.george@consensys.net>
-contract GSNMultiSigWallet is Initializable {
+contract GSNMultiSigWallet is Initializable, GSNRecipient {
 
     /*
      *  Events
@@ -45,7 +47,7 @@ contract GSNMultiSigWallet is Initializable {
      *  Modifiers
      */
     modifier onlyWallet() {
-        require(msg.sender == address(this));
+        require(_msgSender() == address(this));
         _;
     }
 
@@ -94,10 +96,11 @@ contract GSNMultiSigWallet is Initializable {
 
     /// @dev Fallback function allows to deposit ether.
     function()
-        external payable
+        external
+        payable
     {
         if (msg.value > 0)
-            emit Deposit(msg.sender, msg.value);
+            emit Deposit(_msgSender(), msg.value);
     }
 
     /*
@@ -117,7 +120,7 @@ contract GSNMultiSigWallet is Initializable {
         required = _required;
     }
 
-    // function initialize(address[] memory _owners, uint _required) public initializer
+    // constructor(address[] memory _owners, uint _required) public
     //     validRequirement(_owners.length, _required)
     // {
     //     for (uint i=0; i<_owners.length; i++) {
@@ -209,12 +212,12 @@ contract GSNMultiSigWallet is Initializable {
     /// @param transactionId Transaction ID.
     function confirmTransaction(uint transactionId)
         public
-        ownerExists(msg.sender)
+        ownerExists(_msgSender())
         transactionExists(transactionId)
-        notConfirmed(transactionId, msg.sender)
+        notConfirmed(transactionId, _msgSender())
     {
-        confirmations[transactionId][msg.sender] = true;
-        emit Confirmation(msg.sender, transactionId);
+        confirmations[transactionId][_msgSender()] = true;
+        emit Confirmation(_msgSender(), transactionId);
         executeTransaction(transactionId);
     }
 
@@ -222,20 +225,20 @@ contract GSNMultiSigWallet is Initializable {
     /// @param transactionId Transaction ID.
     function revokeConfirmation(uint transactionId)
         public
-        ownerExists(msg.sender)
-        confirmed(transactionId, msg.sender)
+        ownerExists(_msgSender())
+        confirmed(transactionId, _msgSender())
         notExecuted(transactionId)
     {
-        confirmations[transactionId][msg.sender] = false;
-        emit Revocation(msg.sender, transactionId);
+        confirmations[transactionId][_msgSender()] = false;
+        emit Revocation(_msgSender(), transactionId);
     }
 
     /// @dev Allows anyone to execute a confirmed transaction.
     /// @param transactionId Transaction ID.
     function executeTransaction(uint transactionId)
         public
-        ownerExists(msg.sender)
-        confirmed(transactionId, msg.sender)
+        ownerExists(_msgSender())
+        confirmed(transactionId, _msgSender())
         notExecuted(transactionId)
     {
         if (isConfirmed(transactionId)) {
@@ -399,5 +402,9 @@ contract GSNMultiSigWallet is Initializable {
         _transactionIds = new uint[](to - from);
         for (i=from; i<to; i++)
             _transactionIds[i - from] = transactionIdsTemp[i];
+    }
+
+    function acceptRelayedCall(address relay, address from, bytes calldata encodedFunction, uint256 transactionFee, uint256 gasPrice, uint256 gasLimit, uint256 nonce, bytes calldata approvalData, uint256 maxPossibleCharge) external view returns (uint256, bytes memory) {
+        return (0, "");
     }
 }

@@ -12,9 +12,10 @@
 ;; hard coded for ropsten
 ;; change it to use your own deployed contract if you want to test eg. in ganache/local
 (def network-id :4)
-;; (def contract-addr "0xAc0866AB174ea82bf646B73683B8689900dE7Bad") ;; <- ropsten 
-;; (def contract-addr "0xdb9358f7EDb46499c9e64922F6c67fc654DC10Bd") ;; ropsten
-(def contract-addr "0x06Ab0E124B3A36c9Cf879dD46DC8eb92729e2123")
+
+
+;; (def contract-addr "0x06Ab0E124B3A36c9Cf879dD46DC8eb92729e2123") ;; MultisAccount.sol on ropsten
+(def contract-addr "0x58EB3B25202047E9B2ad9Bb5DE43Edec96b5EF44") ;; MultisAccountWithDailyLimit.sol on ropsten
 
 ;; working ropsten
 ;; (def contract-addr "0x6310eea3cE124675EBDcf07C4aD1150fab7375CC")
