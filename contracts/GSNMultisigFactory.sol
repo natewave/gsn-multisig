@@ -15,6 +15,7 @@ contract GSNMultisigFactory is GSNRecipientERC20Fee, MinterRole, Ownable {
     {
         GSNRecipientERC20Fee.initialize(name, symbol);
         MinterRole.initialize(_msgSender());
+        Ownable.initialize(_msgSender());
     }
 
     function mint(address account, uint256 amount) public onlyMinter {
