@@ -1,8 +1,5 @@
 pragma solidity ^0.5.0;
 
-import "@openzeppelin/upgrades/contracts/Initializable.sol";
-import "@openzeppelin/contracts-ethereum-package/contracts/GSN/GSNRecipient.sol";
-
 import "./GSNMultiSigWallet.sol";
 
 
@@ -30,11 +27,18 @@ contract GSNMultiSigWalletWithDailyLimit is GSNMultiSigWallet {
     /// @param _required Number of required confirmations.
     /// @param _dailyLimit Amount in wei, which can be withdrawn without confirmations on a daily basis.
     function initialize(address[] memory _owners, uint _required, uint _dailyLimit)
-        public
+        public initializer
     {
         GSNMultiSigWallet.initialize(_owners, _required);
         dailyLimit = _dailyLimit;
     }
+
+    // constructor(address[] memory _owners, uint _required, uint _dailyLimit)
+    //     public
+    //     GSNMultiSigWallet(_owners, _required)
+    // {
+    //     dailyLimit = _dailyLimit;
+    // }
 
     /// @dev Allows to change the daily limit. Transaction has to be sent by wallet.
     /// @param _dailyLimit Amount in wei.
